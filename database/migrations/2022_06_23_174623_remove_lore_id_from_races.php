@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('lores', function (Blueprint $table) {
-            $table->dropForeign('race_id');
-            $table->dropColumn('race_id');
+        Schema::table('races', function (Blueprint $table) {
+            $table->dropForeign('lore_id');
+            $table->dropColumn('lore_id');
         });
     }
 
@@ -26,9 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('lores', function (Blueprint $table) {
-            $table->unsignedBigInteger('race_id')->after('id');
-            $table->foreign('race_id')->references('id')->on('races');
+        Schema::table('races', function (Blueprint $table) {
+            $table->unsignedBigInteger('lore_id')->after('id');
+            $table->foreign('lore_id')->references('id')->on('races');
         });
     }
 };
