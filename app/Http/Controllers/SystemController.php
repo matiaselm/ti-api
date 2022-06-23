@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Race;
 use Illuminate\Http\Request;
+use App\Models\System;
 
-class RaceController extends Controller
-{
+class SystemController extends Controller
+{ 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($ids = NULL)
     {
-        return response()->json(Race::with('tendency')->get());
+        $systems = System::query();
+        if(isset($ids)) {
+            $systems->whereIn('id', $ids);
+        }
+        return response()->json($systems->withCount('planets')->get());
     }
 
     /**
@@ -25,48 +29,48 @@ class RaceController extends Controller
      */
     public function store(Request $request)
     {
-        $race = Race::create($request->all());
+        $system = System::create($request->all());
 
-        return $this->show($race->id);
+        return $this->show($system->id);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Race  $race
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return response()->json(Race::findOrFail($id));
+        return response()->json(System::with('planets')->findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Race  $race
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $race = Race::findOrFail($id);
-        $race->update($request->all());
-
-        return $this->show($race->id);
+        $system = System::findOrFail($id);
+        $system->update($request->all());
+        
+        return $this->show($system->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Race  $race
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $race = Race::findOrFail($id);
-        $race->delete();
+        $system = System::findOrFail($id);
+        $system->delete();
 
-        return response()->json(['message' => 'Race deleted']);
+        return response()->json(['message' => 'System deleted']);
     }
 }

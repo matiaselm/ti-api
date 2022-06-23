@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TechnologyType extends Model
+class Anomaly extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $fillable = ['name', 'color'];
+    protected $fillable = ['name', 'effect'];
 
-    
+    public function systems() {
+        return $this->hasMany(System::class);
+    }
 }
