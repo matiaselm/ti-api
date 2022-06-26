@@ -62,7 +62,7 @@ class RaceController extends Controller
      * @param  \App\Models\Race  $race
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
         $race = Race::findOrFail($id);
         $race->delete();

@@ -10,10 +10,11 @@ Route::prefix('tendencies')->group(function() {
 });
 
 Route::prefix('races')->group(function() {
-    Route::get('',     'RaceController@index');
-    Route::get('{id}', 'RaceController@show');
-    Route::post('',    'RaceController@store');
-    Route::put('{id}', 'RaceController@update');
+    Route::get('',        'RaceController@index');
+    Route::get('{id}',    'RaceController@show');
+    Route::post('',       'RaceController@store');
+    Route::put('{id}',    'RaceController@update');
+    Route::delete('{id}', 'RaceController@delete');
 });
 
 Route::prefix('systems')->group(function() {
