@@ -11,7 +11,7 @@ class Tendency extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function races() {
-        return $this->hasMany(Race::class);
+    public function factions() {
+        return $this->hasMany(Faction::class);
     }
 }

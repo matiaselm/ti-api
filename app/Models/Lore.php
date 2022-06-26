@@ -11,7 +11,7 @@ class Lore extends Model
 
     protected $fillable = ['race_id', 'lore', 'population', 'leadership', 'disposition', 'government', 'quote', 'flavor_text'];
 
-    public function race() {
-        return $this->belongsTo(Race::class);
+    public function faction() {
+        return $this->belongsTo(Faction::class);
     }
 }

@@ -9,12 +9,12 @@ Route::prefix('tendencies')->group(function() {
     Route::post('', 'TendencyController@create');
 });
 
-Route::prefix('races')->group(function() {
-    Route::get('',        'RaceController@index');
-    Route::get('{id}',    'RaceController@show');
-    Route::post('',       'RaceController@store');
-    Route::put('{id}',    'RaceController@update');
-    Route::delete('{id}', 'RaceController@delete');
+Route::prefix('factions')->group(function() {
+    Route::get('',        'FactionController@index');
+    Route::get('{id}',    'FactionController@show');
+    Route::post('',       'FactionController@store');
+    Route::put('{id}',    'FactionController@update');
+    Route::delete('{id}', 'FactionController@delete');
 });
 
 Route::prefix('systems')->group(function() {
@@ -28,5 +28,5 @@ Route::prefix('planets')->group(function() {
     Route::get('',     'PlanetController@index');
     Route::get('{id}', 'PlanetController@show');
     Route::post('',    'PlanetController@store');
-    Route::put('{id}', 'SystemController@update');
+    Route::put('{id}', 'PlanetController@update');
 });

@@ -14,7 +14,7 @@ class TendencyController extends Controller
      */
     public function index()
     {
-        return response()->json(Tendency::with('races')->get());
+        return response()->json(Tendency::with('factions')->get());
     }
 
     /**

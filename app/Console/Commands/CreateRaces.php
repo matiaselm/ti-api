@@ -3,12 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Race;
+use App\Models\Faction;
 use App\Models\Tendency;
 
-class CreateRaces extends Command
+class CreateFactions extends Command
 {
-    private $races = [[
+    private $factions = [[
         'name' => 'The Arborec',
         'tendency' => 'Expansionist',
     ],[
@@ -90,7 +90,7 @@ class CreateRaces extends Command
      *
      * @var string
      */
-    protected $signature = 'races:create';
+    protected $signature = 'factions:create';
 
     /**
      * The console command description.
@@ -106,14 +106,14 @@ class CreateRaces extends Command
      */
     public function handle()
     {
-        Race::truncate();
+        Faction::truncate();
         Tendency::truncate();
 
-        foreach($this->races as $race) {
-            $r = new Race();
+        foreach($this->factions as $faction) {
+            $r = new Faction();
             $r->fill([
-                'name' => $race['name'],
-                'tendency' => $race['tendency'],
+                'name' => $faction['name'],
+                'tendency' => $faction['tendency'],
                 'tendency_id' => 0,
             ]);
             $r->save();
@@ -129,7 +129,7 @@ class CreateRaces extends Command
             $r->save();
         }
 
-        print('created races');
+        print('created factions');
         return 0;
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Race;
+use App\Models\Faction;
 
 class TestRelation extends Command
 {
@@ -28,10 +28,10 @@ class TestRelation extends Command
      */
     public function handle()
     {
-        $races = Race::with('tendency')->get();
+        $factions = Faction::with('tendency')->get();
 
-        foreach($races as $race) {
-            print($race);
+        foreach($factions as $faction) {
+            print($faction);
         }
         return 0;
     }

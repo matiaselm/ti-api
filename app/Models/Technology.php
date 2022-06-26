@@ -12,7 +12,7 @@ class Technology extends Model
     protected $guarded  = ['id', 'created_at', 'updated_at'];
     protected $fillable = ['race_id', 'level', 'name'];
 
-    public function race() {
-        return $this->belongsTo(Race::class);
+    public function faction() {
+        return $this->belongsTo(Faction::class);
     }
 }
