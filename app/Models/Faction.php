@@ -12,11 +12,25 @@ class Faction extends Model
     protected $guarded  = ['id', 'created', 'updated_at'];
     protected $fillable = ['name', 'tendency_id', 'commodities', 'tendency'];
 
+    protected $appends = ['planets_count'];
+
+    public function systems() {
+        return $this->hasMany(System::class);
+    }
+
     public function tendency() {
         return $this->belongsTo(Tendency::class, 'tendency_id');
     }
 
     public function lore() {
         return $this->hasOne(Lore::class);
+    }
+
+    public function getPlanetsCountAttribute() {
+        $sum = 0;
+        foreach($this->systems as $system) {
+            $sum += $system->planets->count();
+        }
+        return $sum;
     }
 }

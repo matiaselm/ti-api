@@ -9,6 +9,10 @@ Route::prefix('tendencies')->group(function() {
     Route::post('', 'TendencyController@create');
 });
 
+Route::prefix('anomalies')->group(function() {
+    Route::get('', 'AnomalyController@getAll');
+});
+
 Route::prefix('factions')->group(function() {
     Route::get('',        'FactionController@index');
     Route::get('{id}',    'FactionController@show');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Faction;
+use App\Models\System;
+use App\Models\Planet;
 use Illuminate\Http\Request;
 
 class FactionController extends Controller
@@ -27,7 +29,7 @@ class FactionController extends Controller
     {
         $faction = Faction::create($request->all());
 
-        return $this->show($faction->id);
+        return $this->update($request, $faction->id);
     }
 
     /**
@@ -38,7 +40,7 @@ class FactionController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Faction::findOrFail($id));
+        return response()->json(Faction::with('systems', 'systems.planets')->findOrFail($id));
     }
 
     /**
@@ -51,7 +53,50 @@ class FactionController extends Controller
     public function update(Request $request, $id)
     {
         $faction = Faction::findOrFail($id);
-        $faction->update($request->all());
+        $values = $request->all();
+        $faction->fill($values);
+        $faction->save();
+
+        if($request->has('systems')) {
+            $systemIds = [];
+            foreach($values['systems'] ?? [] as $inputSystem) {
+                $system = System::where('number', $inputSystem['number'])->first();
+                if(!$system) {
+                    $system = new System();
+                }
+    
+                $system->fill([
+                    'number'     => $inputSystem['number'],
+                    'anomaly_id' => $inputSystem['anomaly_id'] ?? null,
+                    'faction_id' => $faction->id,
+                ]);
+    
+                $system->save();
+                $systemIds[] = $system->id;
+
+                $planetIds = [];
+                foreach($inputSystem['planets'] as $inputPlanet) {
+                    $planet = Planet::where('name', $inputPlanet['name'])->first();
+                    if(!$planet) {
+                        $planet = new Planet();
+                    }
+    
+                    $planet->fill([
+                        'name'       => $inputPlanet['name'],
+                        'type'       => $inputPlanet['type'],
+                        'is_special' => $inputPlanet['is_special'] ?? false,
+                        'production' => $inputPlanet['production'],
+                        'influence'  => $inputPlanet['influence'],
+                        'system_id'  => $system->id,
+                    ]);
+    
+                    $planet->save();
+                    $planetIds[] = $planet->id;
+                }
+                Planet::whereNotIn('id', $planetIds)->where('system_id', $system->id)->delete();
+            }
+            System::whereNotIn('id', $systemIds)->where('faction_id', $faction->id)->delete();
+        }
 
         return $this->show($faction->id);
     }

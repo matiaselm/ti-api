@@ -10,7 +10,7 @@ class Planet extends Model
     use HasFactory;
 
     protected $guarded  = ['id', 'created_at', 'updated_at'];
-    protected $fillable = ['system_id', 'name', 'type', 'is_special'];
+    protected $fillable = ['system_id', 'name', 'type', 'is_special', 'production', 'influence'];
 
     public function system() {
         return $this->belongsTo(System::class);
