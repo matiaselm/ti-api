@@ -9,5 +9,5 @@ class Unit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['race_id', 'name', 'type', 'level', 'cost', 'combat', 'move', 'capacity'];
+    protected $fillable = ['faction_id', 'name', 'type', 'level', 'cost', 'combat', 'move', 'capacity'];
 }

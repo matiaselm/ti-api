@@ -9,7 +9,7 @@ class Lore extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['race_id', 'lore', 'population', 'leadership', 'disposition', 'government', 'quote', 'flavor_text'];
+    protected $fillable = ['faction_id', 'lore', 'population', 'leadership', 'disposition', 'government', 'quote', 'flavor_text'];
 
     public function faction() {
         return $this->belongsTo(Faction::class);
