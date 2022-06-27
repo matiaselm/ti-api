@@ -18,7 +18,7 @@ class SystemController extends Controller
         if(isset($ids)) {
             $systems->whereIn('id', $ids);
         }
-        return response()->json($systems->withCount('planets')->get());
+        return response()->json($systems->with('anomaly', 'faction')->withCount('planets')->get());
     }
 
     /**

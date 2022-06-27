@@ -15,4 +15,13 @@ class System extends Model
     public function planets() {
         return $this->hasMany(Planet::class);
     }
+
+    public function anomaly() {
+        return $this->belongsTo(Anomaly::class);
+    }
+
+    public function faction() {
+        return $this->belongsTo(Faction::class);
+    }
+
 }
