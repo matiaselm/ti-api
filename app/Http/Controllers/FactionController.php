@@ -14,9 +14,16 @@ class FactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Faction::with('tendency')->get());
+        $factions = Faction::query()->with('tendency');
+        if($request->search) {
+            $factions->where(function($query) use($request) {
+                return $query->where('name', 'LIKE', "%{$request->search}%")
+                    ->orWhereHas('tendency', fn($q) => $q->where('name', 'LIKE', "%{$request->search}%"));
+            });
+        }
+        return response()->json($factions->get());
     }
 
     /**

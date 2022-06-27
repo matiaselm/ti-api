@@ -12,12 +12,19 @@ class SystemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($ids = NULL)
+    public function index(Request $request, $ids = NULL)
     {
         $systems = System::query();
         if(isset($ids)) {
             $systems->whereIn('id', $ids);
         }
+
+        if($request->search) {
+            $systems->where(function($query) use($request) {
+                return $query->whereHas('faction', fn($q) => $q->where('name', 'LIKE', "%{$request->search}%"));
+            });
+        }
+
         return response()->json($systems->with('anomaly', 'faction')->withCount('planets')->get());
     }
 
