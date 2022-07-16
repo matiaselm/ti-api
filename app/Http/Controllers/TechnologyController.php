@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Technology;
+use App\Models\TechnologyType;
+use App\Models\TechnologyPrerequisite;
 use Illuminate\Http\Request;
 
 class TechnologyController extends Controller
@@ -12,9 +14,20 @@ class TechnologyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $technologies = Technology::with('faction', 'type', 'prerequisites')
+            ->where(function($query) use($request) {
+                return $query->where('name', 'like', "%{$request->search}%")
+                    ->orWhereHas('faction', fn($q) => $q->where('name', 'like', "%{$request->search}%"))
+                    ->orWhereHas('type', fn($q) => $q->where(fn($q) =>
+                        $q->where('name', 'like', "%{$request->search}%")
+                            ->orWhere('color', 'like', "%{$request->search}%")
+                    ));
+            })
+            ->get();
+
+        return response()->json($technologies);
     }
 
     /**

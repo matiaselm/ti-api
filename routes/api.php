@@ -13,6 +13,10 @@ Route::prefix('anomalies')->group(function() {
     Route::get('', 'AnomalyController@getAll');
 });
 
+Route::prefix('technologies')->group(function() {
+    Route::get('', 'TechnologyController@index');
+});
+
 Route::prefix('factions')->group(function() {
     Route::get('',        'FactionController@index');
     Route::get('{id}',    'FactionController@show');
