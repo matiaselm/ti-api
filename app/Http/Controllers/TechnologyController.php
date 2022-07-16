@@ -31,35 +31,14 @@ class TechnologyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Technology  $technology
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Technology $technology)
+    public function getOne(Request $request, $id)
     {
-        //
+        return response()->json(Technology::with('faction', 'type', 'prerequisites')->findOrFail($id));
     }
 
     /**
@@ -68,9 +47,10 @@ class TechnologyController extends Controller
      * @param  \App\Models\Technology  $technology
      * @return \Illuminate\Http\Response
      */
-    public function edit(Technology $technology)
+    public function create(Request $request)
     {
-        //
+        $technology = Technology::create($request->all());
+        return $this->getOne($request, $technology->id);
     }
 
     /**
@@ -80,9 +60,23 @@ class TechnologyController extends Controller
      * @param  \App\Models\Technology  $technology
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Technology $technology)
+    public function update(Request $request, $id)
     {
-        //
+        $technology = Technology::findOrFail($id);
+        $technology->update($request->all());
+
+        $saved = [];
+        foreach($request->prerequisites as $prerequisite) {
+            $prerequisite = TechnologyPrerequisite::create([
+                'technology_id'      => $technology->id,
+                'technology_type_id' => $prerequisite['id']
+            ]);
+
+            $saved[] = $prerequisite->id;
+        }
+        TechnologyPrerequisite::where('technology_id', $technology->id)->whereNotIn('id', $saved)->delete();
+
+        return $this->getOne($request, $technology->id);
     }
 
     /**
@@ -91,8 +85,10 @@ class TechnologyController extends Controller
      * @param  \App\Models\Technology  $technology
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Technology $technology)
+    public function destroy(Request $request, $id)
     {
-        //
+        $technology = Technology::findOrFail($id);
+        $technology->delete();
+        return response()->json(['success' => true]);   
     }
 }

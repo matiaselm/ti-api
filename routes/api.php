@@ -13,8 +13,16 @@ Route::prefix('anomalies')->group(function() {
     Route::get('', 'AnomalyController@getAll');
 });
 
+Route::prefix('technology_types')->group(function() {
+    Route::get('', 'TechnologyTypeController@getAll');
+});
+
 Route::prefix('technologies')->group(function() {
-    Route::get('', 'TechnologyController@index');
+    Route::get('',        'TechnologyController@index');
+    Route::get('{id}',    'TechnologyController@getOne');
+    Route::post('',       'TechnologyController@create');
+    Route::put('{id}',    'TechnologyController@update');
+    Route::delete('{id}', 'TechnologyController@delete');
 });
 
 Route::prefix('factions')->group(function() {
