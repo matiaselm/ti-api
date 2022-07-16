@@ -50,6 +50,20 @@ class TechnologyController extends Controller
     public function create(Request $request)
     {
         $technology = Technology::create($request->all());
+        
+        $saved = [];
+        foreach($request->prerequisites as $data) {
+            $prerequisite = TechnologyPrerequisite::create([
+                'technology_id'      => $technology->id,
+                'technology_type_id' => $data['id']
+            ]);
+
+            $prerequisite->save();
+        
+            $saved[] = $prerequisite->id;
+        }
+        TechnologyPrerequisite::where('technology_id', $technology->id)->whereNotIn('id', $saved)->delete();
+
         return $this->getOne($request, $technology->id);
     }
 
@@ -64,13 +78,21 @@ class TechnologyController extends Controller
     {
         $technology = Technology::findOrFail($id);
         $technology->update($request->all());
+        $technology->save();
 
         $saved = [];
-        foreach($request->prerequisites as $prerequisite) {
+
+        \Log::info('Saving prerequisites '. json_encode($request->prerequisites));
+
+        foreach($request->prerequisites as $data) {
             $prerequisite = TechnologyPrerequisite::create([
                 'technology_id'      => $technology->id,
-                'technology_type_id' => $prerequisite['id']
+                'technology_type_id' => $data['id']
             ]);
+
+            $prerequisite->save();
+
+            \Log::info(json_encode($prerequisite));
 
             $saved[] = $prerequisite->id;
         }

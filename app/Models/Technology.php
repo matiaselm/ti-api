@@ -27,7 +27,7 @@ class Technology extends Model
             'technology_id', // Foreign key on the prerequisites table
             'id', // Foreign key on the technologytypes table
             'id', // Local key on the technologies table
-            'technology_id' // Local key on the prerequisites table
+            'technology_type_id' // Local key on the prerequisites table
         );
     }
 }
