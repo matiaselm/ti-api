@@ -10,7 +10,7 @@ class Faction extends Model
     use HasFactory;
 
     protected $guarded  = ['id', 'created', 'updated_at'];
-    protected $fillable = ['name', 'tendency_id', 'commodities', 'tendency'];
+    protected $fillable = ['image_url', 'name', 'tendency_id', 'commodities', 'tendency'];
 
     protected $appends = ['planets_count'];
 
